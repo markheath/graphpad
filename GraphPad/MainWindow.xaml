@@ -8,6 +8,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <TextBox FontFamily="Consolas" AcceptsReturn="True" Grid.Column="0" x:Name="graphText"/>
+        <GridSplitter Grid.Column="0" Width="5"/>
         <Canvas Grid.Column="1" x:Name="graphCanvas" />
     </Grid>
 </Window>

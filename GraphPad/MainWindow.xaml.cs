@@ -30,7 +30,7 @@ namespace GraphPad
             RecreateGraph();
         }
 
-        private Dictionary<string, FrameworkElement> nodes = new Dictionary<string, FrameworkElement>();
+        private Dictionary<string, Node> nodes = new Dictionary<string, Node>();
 
         private void RecreateGraph()
         {
@@ -39,20 +39,77 @@ namespace GraphPad
             nodes.Clear();
             double top = 10;
             double left = 10;
+            Node lastNode = null;
             foreach (var token in tokens)
             {
-                if (token == ">")
+                switch(token)
                 {
-
+                    case ">":
+                    case "<":
+                    case "-":
+                        break;
+                    default:
+                        Node node;
+                        if (nodes.ContainsKey(token))
+                        {
+                            node = nodes[token];
+                        }
+                        else
+                        {
+                            node = CreateNode(left, top, token);
+                            left += node.Width + 10;
+                            graphCanvas.Children.Add(node);
+                            nodes[token] = node;
+                        }
+                        if (lastNode != null)
+                        {
+                            lastNode.Connections.Add(node);
+                        }
+                        lastNode = node;
+                        break;
                 }
-                else if (token.Trim().Length > 0)
+            }
+            CreateConnections();
+        }
+
+        private void CreateConnections()
+        {
+            foreach (var node in nodes.Values)
+            {
+                foreach (var connection in node.Connections)
                 {
-                    var node = CreateNode(left, top, token);
-                    left += node.Width + 10;
-                    graphCanvas.Children.Add(node);
+                    var line = new Line();
+                    line.Stroke = Brushes.Black;
+                    line.StrokeThickness = 2.0;
+                    var from = GetNodeMidpoint(node);
+                    var to = GetNodeMidpoint(connection);
+
+                    // trim the line
+                    var angle = Math.Asin(to.Y - from.Y / to.X - from.X);
+                    var radius = node.Width / 2;
+                    from.X += radius * Math.Cos(angle);
+                    from.Y += radius * Math.Sin(angle);
+
+                    to.X -= radius * Math.Cos(angle);
+                    from.Y -= radius * Math.Sin(angle);
+
+
+                    line.X1 = from.X;
+                    line.Y1 = from.Y;
+                    line.X2 = to.X;
+                    line.Y2 = to.Y;
+                    graphCanvas.Children.Add(line);
                 }
             }
         }
+
+        private static Point GetNodeMidpoint(Node node)
+        {
+            var radius = node.Width / 2;
+            return new Point((double)node.GetValue(Canvas.LeftProperty) + radius, (double)node.GetValue(Canvas.TopProperty) + radius);
+        }
+
+
 
         private static Node CreateNode(double left, double top, string name)
         {
