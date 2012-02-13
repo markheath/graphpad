@@ -1,0 +1,13 @@
+﻿<Window x:Class="GraphPad.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBox FontFamily="Consolas" AcceptsReturn="True" Grid.Column="0" x:Name="graphText"/>
+        <Canvas Grid.Column="1" x:Name="graphCanvas" />
+    </Grid>
+</Window>
