@@ -8,7 +8,6 @@ namespace GraphPad
 {
     class Tokenizer
     {
-
         // helpful article http://en.csharp-online.net/CSharp_Regular_Expression_Recipes%E2%80%94A_Better_Tokenizer
 
         public static string[] Tokenize(string graphMarkup)

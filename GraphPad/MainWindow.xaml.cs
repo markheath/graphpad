@@ -47,18 +47,19 @@ namespace GraphPad
                 }
                 else if (token.Trim().Length > 0)
                 {
-                    var node = CreateNode(left, top);
+                    var node = CreateNode(left, top, token);
                     left += node.Width + 10;
                     graphCanvas.Children.Add(node);
                 }
             }
         }
 
-        private static Node CreateNode(double left, double top)
+        private static Node CreateNode(double left, double top, string name)
         {
             var node = new Node();
             node.SetValue(Canvas.LeftProperty, left);
             node.SetValue(Canvas.TopProperty, top);
+            node.NodeName = name;
             return node;
         }
     }

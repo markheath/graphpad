@@ -8,6 +8,6 @@
              d:DesignHeight="40" d:DesignWidth="40">
     <Grid>
         <Ellipse Stroke="Black" StrokeThickness="2" x:Name="ellipse" />
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="A" FontSize="20"/>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="A" FontSize="20" x:Name="nodeNameTextBlock" />
     </Grid>
 </UserControl>
