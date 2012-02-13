@@ -85,14 +85,13 @@ namespace GraphPad
                     var to = GetNodeMidpoint(connection);
 
                     // trim the line
-                    var angle = Math.Asin(to.Y - from.Y / to.X - from.X);
+                    var angle = Math.Asin((to.Y - from.Y) / (to.X - from.X));
                     var radius = node.Width / 2;
                     from.X += radius * Math.Cos(angle);
                     from.Y += radius * Math.Sin(angle);
 
                     to.X -= radius * Math.Cos(angle);
                     from.Y -= radius * Math.Sin(angle);
-
 
                     line.X1 = from.X;
                     line.Y1 = from.Y;
