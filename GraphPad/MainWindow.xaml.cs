@@ -47,22 +47,18 @@ namespace GraphPad
                 }
                 else if (token.Trim().Length > 0)
                 {
-                    Ellipse node = CreateNode(left, top);
+                    var node = CreateNode(left, top);
                     left += node.Width + 10;
                     graphCanvas.Children.Add(node);
                 }
             }
         }
 
-        private static Ellipse CreateNode(double left, double top)
+        private static Node CreateNode(double left, double top)
         {
-            Ellipse node = new Ellipse();
-            node.Width = 40;
-            node.Height = 40;
+            var node = new Node();
             node.SetValue(Canvas.LeftProperty, left);
             node.SetValue(Canvas.TopProperty, top);
-            node.Stroke = Brushes.Black;
-            node.StrokeThickness = 2;
             return node;
         }
     }
