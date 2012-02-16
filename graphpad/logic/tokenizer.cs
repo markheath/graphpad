@@ -12,12 +12,38 @@ namespace GraphPad.Logic
 
         public static IEnumerable<string> Tokenize(string graphMarkup)
         {
-            Regex regularExpression = new Regex(@"([\-\<\>\r\n])");
-            return (regularExpression.Split(graphMarkup).
-                Select(x => x == "\n" ? "%NEWLINE%" : x).
-                Select(x => x.Trim()));
+            Regex regularExpression = new Regex(@"([\-\<\>])");
+            
+            var lines = graphMarkup.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+
+            foreach (var line in lines.InterleaveWith("%NEWLINE%"))
+            {
+                foreach (var token in regularExpression.Split(line))
+                {
+                    yield return token.Trim();
+                }
+            }
         }
 
+    }
+
+    static class Extensions
+    {
+        public static IEnumerable<T> InterleaveWith<T>(this IEnumerable<T> sequence, T separator)
+        {
+            var enumerator = sequence.GetEnumerator();
+            bool finished = !enumerator.MoveNext();
+            
+            while (!finished)
+            {
+                yield return enumerator.Current;
+                if (enumerator.MoveNext())
+                    yield return separator;
+                else
+                    finished = true;
+            }
+
+        }
     }
 
 }
