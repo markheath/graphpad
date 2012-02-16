@@ -57,6 +57,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Logic\Graph.cs" />
+    <Compile Include="Logic\GraphBuilder.cs" />
+    <Compile Include="Logic\GraphRenderer.cs" />
+    <Compile Include="Logic\NodeInfo.cs" />
     <Compile Include="Node.xaml.cs">
       <DependentUpon>Node.xaml</DependentUpon>
     </Compile>
