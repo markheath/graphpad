@@ -14,6 +14,7 @@ namespace GraphPad.Logic
         {
             Regex regularExpression = new Regex(@"([\-\<\>\r\n])");
             return (regularExpression.Split(graphMarkup).
+                Select(x => x == "\n" ? "%NEWLINE%" : x).
                 Select(x => x.Trim()));
         }
 

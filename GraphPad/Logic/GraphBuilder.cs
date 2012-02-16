@@ -20,7 +20,10 @@ namespace GraphPad.Logic
                     case "<":
                     case "-":
                         break;
-                    case "\n":
+                    case "":
+                        // ignore
+                        break;
+                    case "%NEWLINE%":
                         // started a new line
                         lastNode = null;
                         break;
