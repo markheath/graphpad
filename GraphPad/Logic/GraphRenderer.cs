@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows;
 using System.Windows.Media;
+using Petzold.Media2D;
 
 namespace GraphPad.Logic
 {
@@ -45,9 +46,11 @@ namespace GraphPad.Logic
                 foreach (var connectionInfo in nodeInfo.Connections)
                 {
                     var connection = nodes[connectionInfo.Name];
-                    var line = new Line();
+                    var line = new ArrowLine();
                     line.Stroke = Brushes.Black;
                     line.StrokeThickness = 2.0;
+                    line.ArrowEnds = ArrowEnds.Start;
+                    line.ArrowLength = 8;
                     var from = GetNodeMidpoint(node);
                     var to = GetNodeMidpoint(connection);
 
