@@ -60,7 +60,7 @@
     <Compile Include="Node.xaml.cs">
       <DependentUpon>Node.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tokenizer.cs" />
+    <Compile Include="Logic\Tokenizer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
