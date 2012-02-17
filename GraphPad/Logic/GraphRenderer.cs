@@ -14,6 +14,7 @@ namespace GraphPad.Logic
     {
         private Canvas canvas;
         private Dictionary<string, Node> nodes;
+        private const double nodePadding = 10.0;
 
         public GraphRenderer(Canvas canvas)
         {
@@ -25,8 +26,8 @@ namespace GraphPad.Logic
         {
             canvas.Children.Clear();
             this.nodes.Clear();
-            double top = 10;
-            double left = 10;
+            double top = nodePadding;
+            double left = nodePadding;
             // create nodes
             foreach (var nodeInfo in graph.Nodes)
             {
@@ -35,7 +36,39 @@ namespace GraphPad.Logic
                 canvas.Children.Add(node);
                 nodes[nodeInfo.Name] = node;
             }
+            bool overlaps = false;
+            do
+            {
+                // now reposition nodes that are overlapped down
+                // nodes are in x order
+                for (int nodeIndex = 0; nodeIndex < graph.Nodes.Count; nodeIndex++)
+                {
+                    var nodeInfo = graph.Nodes[nodeIndex];
+                    foreach (var connectionInfo in nodeInfo.Connections)
+                    {
+                        var connectedNodeIndex = graph.Nodes.IndexOf(connectionInfo);
+                        if (Math.Abs(connectedNodeIndex - nodeIndex) > 1)
+                        {
+                            // non-adjacent
+                            for (int nodeToMoveIndex = Math.Min(connectedNodeIndex, nodeIndex) + 1; nodeToMoveIndex < Math.Max(connectedNodeIndex, nodeIndex); nodeToMoveIndex++)
+                            {
+                                MoveDown(graph.Nodes[nodeToMoveIndex]);
+                            }
+                            
+                        }
+                    }
+                }
+            } while (overlaps);
+
             CreateConnections(graph);
+        }
+
+        private void MoveDown(NodeInfo nodeInfo)
+        {
+            var node = nodes[nodeInfo.Name];
+            double yPosition = (double)node.GetValue(Canvas.TopProperty);
+
+            node.SetValue(Canvas.TopProperty, yPosition + node.Height + nodePadding);
         }
 
         private void CreateConnections(Graph graph)
@@ -55,13 +88,15 @@ namespace GraphPad.Logic
                     var to = GetNodeMidpoint(connection);
 
                     // trim the line
-                    var angle = Math.Asin((to.Y - from.Y) / (to.X - from.X));
+                    var angle = Math.Atan((to.Y - from.Y) / (to.X - from.X));
                     var radius = node.Width / 2;
-                    from.X += radius * Math.Cos(angle);
-                    from.Y += radius * Math.Sin(angle);
+                    var xOffset = radius * Math.Cos(angle);
+                    var yOffset = radius * Math.Sin(angle);
+                    from.X += xOffset;
+                    from.Y += yOffset;
 
-                    to.X -= radius * Math.Cos(angle);
-                    from.Y -= radius * Math.Sin(angle);
+                    to.X -= xOffset;
+                    to.Y -= yOffset;
 
                     line.X1 = from.X;
                     line.Y1 = from.Y;
