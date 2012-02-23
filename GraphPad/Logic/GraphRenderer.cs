@@ -61,6 +61,9 @@ namespace GraphPad.Logic
             } while (overlaps);
 
             CreateConnections(graph);
+
+            canvas.Width = nodes.Values.Max(x => (double)x.GetValue(Canvas.LeftProperty) + x.Width + nodePadding);
+            canvas.Height = nodes.Values.Max(x => (double)x.GetValue(Canvas.TopProperty) + x.Height + nodePadding);
         }
 
         private void MoveDown(NodeInfo nodeInfo)
