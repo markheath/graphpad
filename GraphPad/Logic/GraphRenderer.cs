@@ -79,32 +79,52 @@ namespace GraphPad.Logic
                 foreach (var connectionInfo in nodeInfo.Connections)
                 {
                     var connection = nodes[connectionInfo.Name];
-                    var line = new ArrowLine();
-                    line.Stroke = Brushes.Black;
-                    line.StrokeThickness = 2.0;
-                    line.ArrowEnds = ArrowEnds.Start;
-                    line.ArrowLength = 8;
-                    var from = GetNodeMidpoint(node);
-                    var to = GetNodeMidpoint(connection);
+                    UIElement connector;
+                    var midNode = GetNodeMidpoint(node);
+                    var midConnection = GetNodeMidpoint(connection);
+                    var gridSpacing = node.Width + nodePadding;
 
-                    // trim the line
-                    var angle = Math.Atan((to.Y - from.Y) / (to.X - from.X));
-                    var radius = node.Width / 2;
-                    var xOffset = radius * Math.Cos(angle);
-                    var yOffset = radius * Math.Sin(angle);
-                    from.X += xOffset;
-                    from.Y += yOffset;
-
-                    to.X -= xOffset;
-                    to.Y -= yOffset;
-
-                    line.X1 = from.X;
-                    line.Y1 = from.Y;
-                    line.X2 = to.X;
-                    line.Y2 = to.Y;
-                    canvas.Children.Add(line);
+                    if (midNode.Y == midConnection.Y)
+                    {
+                        connector = GetStraightLine(midNode, midConnection, node.Width / 2, Brushes.Black);
+                    }
+                    else if ((Math.Abs(midNode.X - midConnection.X) <= gridSpacing) &&
+                        (Math.Abs(midNode.Y - midConnection.Y) <= gridSpacing))
+                    {
+                        connector = GetStraightLine(midNode, midConnection, node.Width / 2, Brushes.Green);
+                    }
+                    else
+                    {
+                        connector = GetStraightLine(midNode, midConnection, node.Width / 2, Brushes.Red);
+                    }
+                    canvas.Children.Add(connector);
                 }
             }
+        }
+
+        private static ArrowLine GetStraightLine(Point from, Point to, double radius, Brush stroke)
+        {
+            var line = new ArrowLine();
+            line.Stroke = stroke;
+            line.StrokeThickness = 2.0;
+            line.ArrowEnds = ArrowEnds.Start;
+            line.ArrowLength = 8;
+
+            // trim the line
+            var angle = Math.Atan((to.Y - from.Y) / (to.X - from.X));
+            var xOffset = radius * Math.Cos(angle);
+            var yOffset = radius * Math.Sin(angle);
+            from.X += xOffset;
+            from.Y += yOffset;
+
+            to.X -= xOffset;
+            to.Y -= yOffset;
+
+            line.X1 = from.X;
+            line.Y1 = from.Y;
+            line.X2 = to.X;
+            line.Y2 = to.Y;
+            return line;
         }
 
         private static Point GetNodeMidpoint(Node node)

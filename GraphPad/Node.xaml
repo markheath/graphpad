@@ -6,8 +6,8 @@
              mc:Ignorable="d" 
              Width="40" Height="40"
              d:DesignHeight="40" d:DesignWidth="40">
-    <Grid>
-        <Ellipse Stroke="Black" StrokeThickness="2" x:Name="ellipse" />
+    <Grid ToolTip="This is a node">
+        <Ellipse Stroke="Black" StrokeThickness="2" x:Name="ellipse" Fill="White" />
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="A" FontSize="20" x:Name="nodeNameTextBlock" />
     </Grid>
 </UserControl>
