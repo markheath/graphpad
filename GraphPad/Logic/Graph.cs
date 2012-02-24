@@ -14,6 +14,9 @@ namespace GraphPad.Logic
             this.nodes = new List<NodeInfo>();
         }
 
+        public IEnumerable<NodeInfo> RootNodes { get { return nodes.Where(n => n.IsRootNode()); } }
+        public IEnumerable<NodeInfo> LeafNodes { get { return nodes.Where(n => n.IsLeafNode()); } }
+
         public IList<NodeInfo> Nodes { get { return nodes; } }
     }
 }

@@ -57,5 +57,15 @@ namespace GraphPad.Logic
         {
             return String.Format("Node {0}", Name);
         }
+
+        public bool IsRootNode()
+        {
+            return !Parents.Any();
+        }
+
+        public bool IsLeafNode()
+        {
+            return !Children.Any();
+        }
     }
 }
