@@ -10,42 +10,28 @@ namespace GraphPad.Tests
     [TestFixture]
     public class GraphTests
     {
+        private GraphBuilder builder = new GraphBuilder();
         [Test]
         public void CanFindRoot()
         {
-            NodeInfo root = new NodeInfo() { Name = "root" };
-            NodeInfo a = new NodeInfo() { Name = "a" };
-            root.AddChild(a);
-            Graph g = new Graph();
-            g.Nodes.Add(root);
-            g.Nodes.Add(a);
-
+            Graph g = builder.GenerateGraph("root-a");
             Assert.AreEqual(1, g.RootNodes.Count());
-            Assert.AreEqual(root, g.RootNodes.First());
-
+            Assert.AreEqual("root", g.RootNodes.First().Name);
         }
 
         [Test]
         public void CanFindLeaf()
         {
-            NodeInfo root = new NodeInfo() { Name = "root" };
-            NodeInfo middle = new NodeInfo() { Name = "middle" };
-            NodeInfo leaf = new NodeInfo() { Name = "leaf" };
-            root.AddChild(middle);
-            middle.AddChild(leaf);
-            Graph g = new Graph();
-            g.Nodes.Add(root);
-            g.Nodes.Add(middle);
-            g.Nodes.Add(leaf);
+            Graph g = builder.GenerateGraph("root-middle-leaf");
 
             Assert.AreEqual(1, g.LeafNodes.Count());
-            Assert.AreEqual(leaf, g.LeafNodes.First());
+            Assert.AreEqual("leaf", g.LeafNodes.First().Name);
         }
 
         [Test]
         public void CanFindLongestPathSimple()
         {
-            Graph g = CreateGraph(3);
+            Graph g = builder.GenerateGraph("a-b-c");
             var longest = g.FindLongestPath();
             Assert.AreEqual(3, longest.Count());
         }
@@ -53,30 +39,10 @@ namespace GraphPad.Tests
         [Test]
         public void CanFindLongestPathComplex()
         {
-            Graph g = CreateGraph(3);
-            g.Nodes.Add(new NodeInfo() { Name = "3" });
-            g.Nodes.Add(new NodeInfo() { Name = "4" });
-            g.Nodes.Add(new NodeInfo() { Name = "5" });
-            g.Nodes[1].AddChild(g.Nodes[3]);
-            g.Nodes[3].AddChild(g.Nodes[4]);
-            g.Nodes[4].AddChild(g.Nodes[5]);
+            Graph g = builder.GenerateGraph("a-b-c\nb-d-e-f");
 
             var longest = g.FindLongestPath();
             Assert.AreEqual(5, longest.Count());
-        }
-
-        private Graph CreateGraph(int nodes)
-        {
-            Graph g = new Graph();
-            for (int n = 0; n < nodes; n++)
-            {
-                g.Nodes.Add(new NodeInfo() { Name = n.ToString() });
-                if (n > 0)
-                {
-                    g.Nodes[n-1].AddChild(g.Nodes[n]);
-                }
-            }
-            return g;
         }
     }
 }
