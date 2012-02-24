@@ -44,5 +44,14 @@ namespace GraphPad.Tests
             var longest = g.FindLongestPath();
             Assert.AreEqual(5, longest.Count());
         }
+
+        [Test]
+        public void CanFindNearestCommonAncestor()
+        {
+            Graph g = builder.GenerateGraph("a-b-c\nb-d-e-f");
+
+            var longest = g.FindNearestCommonAncestor(g.GetNodeByName("c"), g.GetNodeByName("f"));
+            Assert.AreEqual(g.GetNodeByName("b"), longest);
+        }
     }
 }
