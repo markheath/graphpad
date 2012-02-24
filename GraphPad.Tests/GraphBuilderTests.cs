@@ -34,8 +34,8 @@ namespace GraphPad.Tests
         {
             var builder = new GraphBuilder();
             Graph g = builder.GenerateGraph("a-b");
-            Assert.AreEqual(1, g.Nodes[0].Connections.Count);
-            Assert.AreEqual("b", g.Nodes[0].Connections[0].Name);
+            Assert.AreEqual(1, g.Nodes[0].Children.Count());
+            Assert.AreEqual("b", g.Nodes[0].Children.First().Name);
         }
 
         [Test]

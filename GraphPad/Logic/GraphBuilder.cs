@@ -40,7 +40,7 @@ namespace GraphPad.Logic
                         }
                         if (lastNode != null)
                         {
-                            lastNode.Connections.Add(node);
+                            lastNode.AddChild(node);
                         }
                         lastNode = node;
                         break;

@@ -44,7 +44,7 @@ namespace GraphPad.Logic
                 for (int nodeIndex = 0; nodeIndex < graph.Nodes.Count; nodeIndex++)
                 {
                     var nodeInfo = graph.Nodes[nodeIndex];
-                    foreach (var connectionInfo in nodeInfo.Connections)
+                    foreach (var connectionInfo in nodeInfo.Children)
                     {
                         var connectedNodeIndex = graph.Nodes.IndexOf(connectionInfo);
                         if (Math.Abs(connectedNodeIndex - nodeIndex) > 1)
@@ -79,7 +79,7 @@ namespace GraphPad.Logic
             foreach (var nodeInfo in graph.Nodes)
             {
                 var node = nodes[nodeInfo.Name];
-                foreach (var connectionInfo in nodeInfo.Connections)
+                foreach (var connectionInfo in nodeInfo.Children)
                 {
                     var connection = nodes[connectionInfo.Name];
                     UIElement connector;
