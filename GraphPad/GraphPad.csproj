@@ -62,9 +62,11 @@
     <Compile Include="Gui\ArrowEnds.cs" />
     <Compile Include="Gui\ArrowPolyline.cs" />
     <Compile Include="Logic\Connection.cs" />
+    <Compile Include="Logic\Entity.cs" />
     <Compile Include="Logic\Graph.cs" />
     <Compile Include="Logic\GraphBuilder.cs" />
     <Compile Include="Logic\GraphRenderer.cs" />
+    <Compile Include="Logic\IDictionary.cs" />
     <Compile Include="Logic\Node.cs" />
     <Compile Include="Logic\RelationshipType.cs" />
     <Compile Include="NodeControl.xaml.cs">

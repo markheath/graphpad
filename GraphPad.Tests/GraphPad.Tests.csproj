@@ -53,7 +53,7 @@
   <ItemGroup>
     <Compile Include="GraphBuilderTests.cs" />
     <Compile Include="GraphTests.cs" />
-    <Compile Include="NodeInfoTests.cs" />
+    <Compile Include="NodeTests.cs" />
     <Compile Include="TokenizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -24,6 +24,11 @@ namespace GraphPad.Logic
             return FindLongest(new List<Node>(), RootNodes);
         }
 
+        public Node GetNodeByName(string name)
+        {
+            return nodes.Where(n => n.Name == name).First();
+        }
+
         private List<Node> FindLongest(List<Node> pathSoFar, IEnumerable<Node> nodesToTest)
         {
             var longest = pathSoFar;

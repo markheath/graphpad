@@ -50,9 +50,12 @@ namespace GraphPad.Logic
         }   
 
         public string Name { get; set; }
+        
         public IEnumerable<Node> Parents { get { return Connections.Where(x => x.Relationship == RelationshipType.Parent).Select(x => x.TargetNode); } }
         public IEnumerable<Node> Children { get { return Connections.Where(x => x.Relationship == RelationshipType.Child).Select(x => x.TargetNode); } }
+        
         private IList<Connection> Connections { get; set; }
+        
         public override string ToString()
         {
             return String.Format("Node {0}", Name);
@@ -67,5 +70,32 @@ namespace GraphPad.Logic
         {
             return !Children.Any();
         }
+
+        public IDictionary<Node,int> FindLongestDistanceToAllAncestors()
+        {
+            var ancestorDistances = new List<NodeAndDistance>();
+            FindDistanceToAncestors(ancestorDistances, 1, this.Parents);
+
+            var nodes = ancestorDistances.Select(x => x.Node).Distinct();
+            Func<Node, int> valueSelector = n => ancestorDistances.Where(x => x.Node == n).Select(x => x.Distance).Max();
+            return nodes.ToDictionary(n => n, valueSelector);
+        }
+
+        // n.b. same ancestor can appear multiple times at different distances
+        private void FindDistanceToAncestors(List<NodeAndDistance> ancestors, int distanceSoFar, IEnumerable<Node> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                ancestors.Add(new NodeAndDistance() { Node = node, Distance = distanceSoFar });
+                FindDistanceToAncestors(ancestors, distanceSoFar + 1, node.Parents);
+            }
+        }
     }
+
+    class NodeAndDistance
+    {
+        public Node Node { get; set; }
+        public int Distance { get; set; }
+    }
+
 }

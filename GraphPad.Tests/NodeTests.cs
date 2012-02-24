@@ -8,7 +8,7 @@ using GraphPad.Logic;
 namespace GraphPad.Tests
 {
     [TestFixture]
-    public class NodeInfoTests
+    public class NodeTests
     {
         [Test]
         public void CanAddAParentRelationship()
@@ -21,5 +21,19 @@ namespace GraphPad.Tests
             Assert.AreEqual(0, child.Children.Count());
             Assert.AreEqual(1, child.Parents.Count());
         }
+
+        [Test]
+        public void CanGetLongestDistanceToAllParents()
+        {
+            var builder = new GraphBuilder();
+            var g = builder.GenerateGraph("a-b-c-d-e-f\na-f");
+            var d = g.GetNodeByName("f").FindLongestDistanceToAllAncestors();
+            var a = g.GetNodeByName("a");
+            var c = g.GetNodeByName("c");
+            
+            Assert.AreEqual(5, d[a]);
+            Assert.AreEqual(3, d[c]);
+        }
+
     }
 }
