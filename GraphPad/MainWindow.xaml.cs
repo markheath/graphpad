@@ -31,7 +31,7 @@ namespace GraphPad
             RecreateGraph();
         }
 
-        private Dictionary<string, Node> nodes = new Dictionary<string, Node>();
+        private Dictionary<string, NodeControl> nodes = new Dictionary<string, NodeControl>();
 
         private void RecreateGraph()
         {

@@ -13,13 +13,13 @@ namespace GraphPad.Logic
     class GraphRenderer
     {
         private Canvas canvas;
-        private Dictionary<string, Node> nodes;
+        private Dictionary<string, NodeControl> nodes;
         private const double nodePadding = 10.0;
 
         public GraphRenderer(Canvas canvas)
         {
             this.canvas = canvas;
-            this.nodes = new Dictionary<string, Node>();
+            this.nodes = new Dictionary<string, NodeControl>();
         }
 
         public void Render(Graph graph)
@@ -130,15 +130,15 @@ namespace GraphPad.Logic
             return line;
         }
 
-        private static Point GetNodeMidpoint(Node node)
+        private static Point GetNodeMidpoint(NodeControl node)
         {
             var radius = node.Width / 2;
             return new Point((double)node.GetValue(Canvas.LeftProperty) + radius, (double)node.GetValue(Canvas.TopProperty) + radius);
         }
 
-        private static Node CreateNode(double left, double top, string name)
+        private static NodeControl CreateNode(double left, double top, string name)
         {
-            var node = new Node();
+            var node = new NodeControl();
             node.SetValue(Canvas.LeftProperty, left);
             node.SetValue(Canvas.TopProperty, top);
             node.NodeName = name;

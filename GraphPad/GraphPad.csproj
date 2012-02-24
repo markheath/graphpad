@@ -67,8 +67,8 @@
     <Compile Include="Logic\GraphRenderer.cs" />
     <Compile Include="Logic\NodeInfo.cs" />
     <Compile Include="Logic\RelationshipType.cs" />
-    <Compile Include="Node.xaml.cs">
-      <DependentUpon>Node.xaml</DependentUpon>
+    <Compile Include="NodeControl.xaml.cs">
+      <DependentUpon>NodeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Logic\Tokenizer.cs" />
     <Page Include="MainWindow.xaml">
@@ -83,7 +83,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Node.xaml">
+    <Page Include="NodeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
