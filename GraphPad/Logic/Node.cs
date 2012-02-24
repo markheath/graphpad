@@ -5,19 +5,19 @@ using System.Text;
 
 namespace GraphPad.Logic
 {
-    class NodeInfo
+    class Node
     {
-        public NodeInfo()
+        public Node()
         {
             this.Connections = new List<Connection>();
         }
 
-        public void AddChild(NodeInfo child)
+        public void AddChild(Node child)
         {
             AddConnection(child, RelationshipType.Child);
         }
 
-        private void AddConnection(NodeInfo connectTo, RelationshipType relationshipType)
+        private void AddConnection(Node connectTo, RelationshipType relationshipType)
         {
             if (connectTo == null)
                 throw new ArgumentNullException();
@@ -50,8 +50,8 @@ namespace GraphPad.Logic
         }   
 
         public string Name { get; set; }
-        public IEnumerable<NodeInfo> Parents { get { return Connections.Where(x => x.Relationship == RelationshipType.Parent).Select(x => x.TargetNode); } }
-        public IEnumerable<NodeInfo> Children { get { return Connections.Where(x => x.Relationship == RelationshipType.Child).Select(x => x.TargetNode); } }
+        public IEnumerable<Node> Parents { get { return Connections.Where(x => x.Relationship == RelationshipType.Parent).Select(x => x.TargetNode); } }
+        public IEnumerable<Node> Children { get { return Connections.Where(x => x.Relationship == RelationshipType.Child).Select(x => x.TargetNode); } }
         private IList<Connection> Connections { get; set; }
         public override string ToString()
         {

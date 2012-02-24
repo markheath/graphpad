@@ -13,8 +13,8 @@ namespace GraphPad.Tests
         [Test]
         public void CanAddAParentRelationship()
         {
-            var parent = new NodeInfo() { Name = "parent" };
-            var child = new NodeInfo() { Name = "child" };
+            var parent = new Node() { Name = "parent" };
+            var child = new Node() { Name = "child" };
             parent.AddChild(child);
             Assert.AreEqual(1, parent.Children.Count());
             Assert.AreEqual(0, parent.Parents.Count());

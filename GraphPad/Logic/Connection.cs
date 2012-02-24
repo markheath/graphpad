@@ -7,7 +7,7 @@ namespace GraphPad.Logic
 {
     class Connection
     {
-        public NodeInfo TargetNode { get; set; }
+        public Node TargetNode { get; set; }
         public RelationshipType Relationship { get; set; }
     }
 }

@@ -66,7 +66,7 @@ namespace GraphPad.Logic
             canvas.Height = nodes.Values.Max(x => (double)x.GetValue(Canvas.TopProperty) + x.Height + nodePadding);
         }
 
-        private void MoveDown(NodeInfo nodeInfo)
+        private void MoveDown(Node nodeInfo)
         {
             var node = nodes[nodeInfo.Name];
             double yPosition = (double)node.GetValue(Canvas.TopProperty);

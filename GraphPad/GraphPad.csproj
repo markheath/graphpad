@@ -65,7 +65,7 @@
     <Compile Include="Logic\Graph.cs" />
     <Compile Include="Logic\GraphBuilder.cs" />
     <Compile Include="Logic\GraphRenderer.cs" />
-    <Compile Include="Logic\NodeInfo.cs" />
+    <Compile Include="Logic\Node.cs" />
     <Compile Include="Logic\RelationshipType.cs" />
     <Compile Include="NodeControl.xaml.cs">
       <DependentUpon>NodeControl.xaml</DependentUpon>

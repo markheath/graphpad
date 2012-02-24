@@ -10,8 +10,8 @@ namespace GraphPad.Logic
         public Graph GenerateGraph(string text)
         {
             var tokens = Tokenizer.Tokenize(text);
-            var nodes = new Dictionary<string, NodeInfo>();
-            NodeInfo lastNode = null;
+            var nodes = new Dictionary<string, Node>();
+            Node lastNode = null;
             foreach (var token in tokens)
             {
                 switch (token)
@@ -28,14 +28,14 @@ namespace GraphPad.Logic
                         lastNode = null;
                         break;
                     default:
-                        NodeInfo node;
+                        Node node;
                         if (nodes.ContainsKey(token))
                         {
                             node = nodes[token];
                         }
                         else
                         {
-                            node = new NodeInfo() { Name = token };
+                            node = new Node() { Name = token };
                             nodes[token] = node;
                         }
                         if (lastNode != null)
