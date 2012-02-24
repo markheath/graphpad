@@ -40,7 +40,43 @@ namespace GraphPad.Tests
 
             Assert.AreEqual(1, g.LeafNodes.Count());
             Assert.AreEqual(leaf, g.LeafNodes.First());
+        }
 
+        [Test]
+        public void CanFindLongestPathSimple()
+        {
+            Graph g = CreateGraph(3);
+            var longest = g.FindLongestPath();
+            Assert.AreEqual(3, longest.Count());
+        }
+
+        [Test]
+        public void CanFindLongestPathComplex()
+        {
+            Graph g = CreateGraph(3);
+            g.Nodes.Add(new NodeInfo() { Name = "3" });
+            g.Nodes.Add(new NodeInfo() { Name = "4" });
+            g.Nodes.Add(new NodeInfo() { Name = "5" });
+            g.Nodes[1].AddChild(g.Nodes[3]);
+            g.Nodes[3].AddChild(g.Nodes[4]);
+            g.Nodes[4].AddChild(g.Nodes[5]);
+
+            var longest = g.FindLongestPath();
+            Assert.AreEqual(5, longest.Count());
+        }
+
+        private Graph CreateGraph(int nodes)
+        {
+            Graph g = new Graph();
+            for (int n = 0; n < nodes; n++)
+            {
+                g.Nodes.Add(new NodeInfo() { Name = n.ToString() });
+                if (n > 0)
+                {
+                    g.Nodes[n-1].AddChild(g.Nodes[n]);
+                }
+            }
+            return g;
         }
     }
 }
