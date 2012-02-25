@@ -8,6 +8,9 @@ namespace GraphPad.Logic
 {
     class GraphLayoutEngine
     {
+        private Grid grid;
+        private int maxRows;
+
         public GraphLayoutEngine()
         {
 
@@ -22,8 +25,8 @@ namespace GraphPad.Logic
             graph.Sort();
 
             int column = 0;
-            this.graph = graph;
-            grid = new BitArray(graph.Nodes.Count * graph.Nodes.Count);
+            this.maxRows = graph.Nodes.Count;
+            this.grid = new Grid(maxRows);
 
             // put one node into each column
             foreach (Node n in graph.Nodes)
@@ -37,6 +40,7 @@ namespace GraphPad.Logic
                 {
                     // root nodes only
                     n.SetRow(GetFreeRow(n.GetColumn(), 0));
+                    grid[n.GetRow(), n.GetColumn()] = true;
                 }
 
                 int startingRow = n.GetRow();
@@ -50,19 +54,47 @@ namespace GraphPad.Logic
                     {
                         c.SetRow(GetFreeRow(c.GetColumn(), startingRow));
                         startingRow = c.GetRow() + 1;
+                        grid[c.GetRow(), c.GetColumn()] = true;
+                    }
+                }
+            }
+
+            // optional stage
+            ShuffleLeft(graph);
+        }
+
+        private void ShuffleLeft(Graph graph)
+        {
+            foreach (Node n in graph.Nodes)
+            {
+                int row = n.GetRow();
+                int col = n.GetColumn();
+                // only bother if we could move left
+                if (col > 0 && grid[row, col - 1] == false)
+                {
+                    // 1. work out min column
+                    int minColumn = n.Parents.Max(p => p.GetColumn()) + 1;
+                    // 2. see if any space is free to left
+                    // not sure whether to go forward or back here
+                    for (int newCol = minColumn; newCol < col; newCol++)
+                    {
+                        if (grid[row, newCol] == false)
+                        {
+                            grid[row, col] = false; // free up the old pos
+                            n.SetColumn(newCol);
+                            grid[row, newCol] = true; // free up the old pos
+                            break;
+                        }
                     }
                 }
             }
         }
 
-        private BitArray grid;
-        private Graph graph;
-
         private int GetFreeRow(int column, int startRow)
         {
-            for (int row = startRow; row < graph.Nodes.Count; row++)
+            for (int row = startRow; row < maxRows; row++)
             {
-                if (!grid[(column * graph.Nodes.Count) + row])
+                if (grid[row, column] == false)
                 {
                     return row;
                 }
