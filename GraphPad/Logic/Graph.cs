@@ -56,7 +56,7 @@ namespace GraphPad.Logic
                     {
                         nodes.RemoveAt(index);
                         nodes.Insert(childIndex, n);
-                        index = childIndex;
+                        index = childIndex + 1;
                         break;
                     }
                 }

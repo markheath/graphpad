@@ -63,5 +63,13 @@ namespace GraphPad.Tests
             g.Sort();
             Assert.AreEqual(5, g.Nodes.IndexOf(f)); 
         }
+
+        [Test]
+        public void SortingTest2()
+        {
+            // thig graph caused original sort to never complete
+            Graph g = builder.GenerateGraph("a-b-c\na-d-e\na-h-b\nc-h");
+            g.Sort();
+        }
     }
 }

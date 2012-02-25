@@ -13,93 +13,59 @@ namespace GraphPad.Logic
     class GraphRenderer
     {
         private Canvas canvas;
-        private Dictionary<string, NodeControl> nodes;
         private const double nodePadding = 10.0;
+        private const double nodeWidth = 40.0;
+        private const double nodeHeight = 40.0;
 
         public GraphRenderer(Canvas canvas)
         {
             this.canvas = canvas;
-            this.nodes = new Dictionary<string, NodeControl>();
         }
 
         public void Render(Graph graph)
         {
-            graph.Sort();
             canvas.Children.Clear();
-            this.nodes.Clear();
-            double top = nodePadding;
-            double left = nodePadding;
-            // create nodes
-            foreach (var nodeInfo in graph.Nodes)
-            {
-                var node = CreateNode(left, top, nodeInfo.Name);
-                left += node.Width + 10;
-                canvas.Children.Add(node);
-                nodes[nodeInfo.Name] = node;
-            }
-            bool overlaps = false;
-            do
-            {
-                // now reposition nodes that are overlapped down
-                // nodes are in x order
-                for (int nodeIndex = 0; nodeIndex < graph.Nodes.Count; nodeIndex++)
-                {
-                    var nodeInfo = graph.Nodes[nodeIndex];
-                    foreach (var connectionInfo in nodeInfo.Children)
-                    {
-                        var connectedNodeIndex = graph.Nodes.IndexOf(connectionInfo);
-                        if (Math.Abs(connectedNodeIndex - nodeIndex) > 1)
-                        {
-                            // non-adjacent
-                            for (int nodeToMoveIndex = Math.Min(connectedNodeIndex, nodeIndex) + 1; nodeToMoveIndex < Math.Max(connectedNodeIndex, nodeIndex); nodeToMoveIndex++)
-                            {
-                                MoveDown(graph.Nodes[nodeToMoveIndex]);
-                            }
-                            
-                        }
-                    }
-                }
-            } while (overlaps);
 
+            // create nodes
+            foreach (var node in graph.Nodes)
+            {
+                var left = node.GetColumn() * (nodePadding + nodeWidth);
+                var top = node.GetRow() * (nodePadding + nodeHeight);
+                var nodeControl = CreateNodeControl(left, top, node.Name);
+                canvas.Children.Add(nodeControl);
+                node.MetaData["Control"] = nodeControl;
+            }
             CreateConnections(graph);
 
-            canvas.Width = nodes.Values.Max(x => (double)x.GetValue(Canvas.LeftProperty) + x.Width + nodePadding);
-            canvas.Height = nodes.Values.Max(x => (double)x.GetValue(Canvas.TopProperty) + x.Height + nodePadding);
-        }
-
-        private void MoveDown(Node nodeInfo)
-        {
-            var node = nodes[nodeInfo.Name];
-            double yPosition = (double)node.GetValue(Canvas.TopProperty);
-
-            node.SetValue(Canvas.TopProperty, yPosition + node.Height + nodePadding);
+            canvas.Width = canvas.Children.OfType<UserControl>().Max(x => (double)x.GetValue(Canvas.LeftProperty) + x.Width + nodePadding);
+            canvas.Height = canvas.Children.OfType<UserControl>().Max(x => (double)x.GetValue(Canvas.TopProperty) + x.Height + nodePadding);
         }
 
         private void CreateConnections(Graph graph)
         {
-            foreach (var nodeInfo in graph.Nodes)
+            foreach (var node in graph.Nodes)
             {
-                var node = nodes[nodeInfo.Name];
-                foreach (var connectionInfo in nodeInfo.Children)
+                var nodeControl = (UserControl)node.MetaData["Control"];
+                foreach (var connection in node.Children)
                 {
-                    var connection = nodes[connectionInfo.Name];
+                    var connectedNodeControl = (UserControl)connection.MetaData["Control"];
                     UIElement connector;
-                    var midNode = GetNodeMidpoint(node);
-                    var midConnection = GetNodeMidpoint(connection);
-                    var gridSpacing = node.Width + nodePadding;
+                    var midNode = GetNodeMidpoint(nodeControl);
+                    var midConnection = GetNodeMidpoint(connectedNodeControl);
+                    var gridSpacing = nodeControl.Width + nodePadding;
 
-                    if (midNode.Y == midConnection.Y)
+                    if (node.GetRow() == connection.GetRow())
                     {
-                        connector = GetStraightLine(midNode, midConnection, node.Width / 2, Brushes.Black);
+                        connector = GetStraightLine(midNode, midConnection, nodeControl.Width / 2, Brushes.Black);
                     }
-                    else if ((Math.Abs(midNode.X - midConnection.X) <= gridSpacing) &&
-                        (Math.Abs(midNode.Y - midConnection.Y) <= gridSpacing))
+                    else if ((Math.Abs(node.GetRow() - connection.GetRow()) <= 1) &&
+                        (Math.Abs(node.GetColumn() - node.GetColumn()) <= 1))
                     {
-                        connector = GetStraightLine(midNode, midConnection, node.Width / 2, Brushes.Green);
+                        connector = GetStraightLine(midNode, midConnection, nodeControl.Width / 2, Brushes.Green);
                     }
                     else
                     {
-                        connector = GetStraightLine(midNode, midConnection, node.Width / 2, Brushes.Red);
+                        connector = GetStraightLine(midNode, midConnection, nodeControl.Width / 2, Brushes.Red);
                     }
                     canvas.Children.Add(connector);
                 }
@@ -131,19 +97,19 @@ namespace GraphPad.Logic
             return line;
         }
 
-        private static Point GetNodeMidpoint(NodeControl node)
+        private static Point GetNodeMidpoint(UserControl node)
         {
             var radius = node.Width / 2;
             return new Point((double)node.GetValue(Canvas.LeftProperty) + radius, (double)node.GetValue(Canvas.TopProperty) + radius);
         }
 
-        private static NodeControl CreateNode(double left, double top, string name)
+        private static NodeControl CreateNodeControl(double left, double top, string name)
         {
-            var node = new NodeControl();
-            node.SetValue(Canvas.LeftProperty, left);
-            node.SetValue(Canvas.TopProperty, top);
-            node.NodeName = name;
-            return node;
+            var nodeControl = new NodeControl();
+            nodeControl.SetValue(Canvas.LeftProperty, left);
+            nodeControl.SetValue(Canvas.TopProperty, top);
+            nodeControl.NodeName = name;
+            return nodeControl;
         }
     }
 }

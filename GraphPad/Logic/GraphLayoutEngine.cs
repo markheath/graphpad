@@ -19,6 +19,8 @@ namespace GraphPad.Logic
         /// <param name="graph"></param>
         public void Layout(Graph graph)
         {
+            graph.Sort();
+
             int column = 0;
             this.graph = graph;
             grid = new BitArray(graph.Nodes.Count * graph.Nodes.Count);

@@ -35,5 +35,18 @@ namespace GraphPad.Tests
             Assert.AreEqual(3, d[c]);
         }
 
+        [Test]
+        public void DenyInvalidDag()
+        {
+            var builder = new GraphBuilder();
+            Assert.Throws<InvalidOperationException>(() => builder.GenerateGraph("a-b-a"));
+        }
+
+        [Test]
+        public void DenyInvalidComplexCycle()
+        {
+            var builder = new GraphBuilder();
+            Assert.Throws<InvalidOperationException>(() => builder.GenerateGraph("a-b-c\nb-d-e\nd-f-g\ng-b"));
+        }
     }
 }

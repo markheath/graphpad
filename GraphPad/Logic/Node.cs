@@ -14,7 +14,24 @@ namespace GraphPad.Logic
 
         public void AddChild(Node child)
         {
+            if (IsAncestor(child))
+                throw new InvalidOperationException("Invalid DAG");
             AddConnection(child, RelationshipType.Child);
+        }
+
+        public bool IsAncestor(Node test)
+        {
+            return IsAncestor(this.Parents, test);
+        }
+
+        private static bool IsAncestor(IEnumerable<Node> nodes, Node test)
+        {
+            foreach (var node in nodes)
+            {
+                if (node == test || IsAncestor(node.Parents, test))
+                    return true;
+            }
+            return false;
         }
 
         private void AddConnection(Node connectTo, RelationshipType relationshipType)

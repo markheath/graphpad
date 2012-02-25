@@ -37,7 +37,9 @@ namespace GraphPad
         {
             GraphBuilder builder = new GraphBuilder();
             GraphRenderer renderer = new GraphRenderer(graphCanvas);
+            GraphLayoutEngine layout = new GraphLayoutEngine();
             Graph graph = builder.GenerateGraph(graphText.Text);
+            layout.Layout(graph);
             renderer.Render(graph);
         }
     }
