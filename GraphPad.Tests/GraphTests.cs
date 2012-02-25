@@ -53,5 +53,15 @@ namespace GraphPad.Tests
             var longest = g.FindNearestCommonAncestor(g.GetNodeByName("c"), g.GetNodeByName("f"));
             Assert.AreEqual(g.GetNodeByName("b"), longest);
         }
+
+        [Test]
+        public void CanSort()
+        {
+            Graph g = builder.GenerateGraph("a-f\na-b-c-d-e-f");
+            var f = g.GetNodeByName("f");
+            Assert.AreEqual(1, g.Nodes.IndexOf(f)); // pre-sorted
+            g.Sort();
+            Assert.AreEqual(5, g.Nodes.IndexOf(f)); 
+        }
     }
 }

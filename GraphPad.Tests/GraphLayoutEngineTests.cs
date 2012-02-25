@@ -37,6 +37,10 @@ namespace GraphPad.Tests
             AssertNodeIsOnRow(g, "g", 1);
         }
 
+        //  test ideas
+        // a-b-c-d\na-e-f-g\nb-h-i-j (should push first branch down?)
+
+
         private static void AssertNodeIsOnRow(Graph g, string node, int row)
         {
             Assert.AreEqual(row, g.GetNodeByName(node).GetRow(), node);

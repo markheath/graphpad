@@ -24,6 +24,7 @@ namespace GraphPad.Logic
 
         public void Render(Graph graph)
         {
+            graph.Sort();
             canvas.Children.Clear();
             this.nodes.Clear();
             double top = nodePadding;
