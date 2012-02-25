@@ -44,6 +44,25 @@ namespace GraphPad.Logic
             return longest;
         }
 
+        public void Sort()
+        {
+            for (int index = 0; index < nodes.Count; index++)
+            {
+                Node n = nodes[index];
+                foreach (var c in n.Children)
+                {
+                    int childIndex = nodes.IndexOf(c);
+                    if (childIndex < index)
+                    {
+                        nodes.RemoveAt(index);
+                        nodes.Insert(childIndex, n);
+                        index = childIndex;
+                        break;
+                    }
+                }
+            }
+        }
+
         public Node FindNearestCommonAncestor(Node first, Node second)
         {
             var firstAncestors = first.FindLongestDistanceToAllAncestors();
