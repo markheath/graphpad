@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GraphPad.Logic
 {
-    class Node : Entity
+    public class Node : Entity
     {
         public Node()
         {

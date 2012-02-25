@@ -8,7 +8,7 @@ namespace GraphPad.Logic
     /// <summary>
     /// base class for anything that needs to store additional metadata
     /// </summary>
-    class Entity
+    public class Entity
     {
         private readonly Dictionary<string,object> metaData;
 

@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GraphBuilderTests.cs" />
+    <Compile Include="GraphLayoutEngineTests.cs" />
     <Compile Include="GraphTests.cs" />
     <Compile Include="NodeTests.cs" />
     <Compile Include="TokenizerTests.cs" />
