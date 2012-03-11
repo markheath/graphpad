@@ -67,9 +67,7 @@ namespace GraphPad.Tests
         [Test]
         public void SortingTest2()
         {
-            // thig graph caused original sort to never complete
-            Graph g = builder.GenerateGraph("a-b-c\na-d-e\na-h-b\nc-h");
-            g.Sort();
+            Assert.Throws<InvalidOperationException>(() => builder.GenerateGraph("a-b-c\na-d-e\na-h-b\nc-h"));
         }
     }
 }
