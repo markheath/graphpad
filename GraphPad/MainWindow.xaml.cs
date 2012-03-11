@@ -24,6 +24,20 @@ namespace GraphPad
         {
             InitializeComponent();
             this.graphText.TextChanged += new TextChangedEventHandler(graphText_TextChanged);
+            this.buttonGit.Click += new RoutedEventHandler(buttonGit_Click);
+        }
+
+        void buttonGit_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.Description = "Select git repository";
+            var result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                GitGraphBuilder gitBuilder = new GitGraphBuilder();
+                var graph = gitBuilder.LoadGraph(dialog.SelectedPath);
+                RedrawGraph(graph);
+            }
         }
 
         void graphText_TextChanged(object sender, TextChangedEventArgs e)
@@ -36,9 +50,14 @@ namespace GraphPad
         private void RecreateGraph()
         {
             GraphBuilder builder = new GraphBuilder();
+            Graph graph = builder.GenerateGraph(graphText.Text);
+            RedrawGraph(graph);
+        }
+
+        private void RedrawGraph(Graph graph)
+        {
             GraphRenderer renderer = new GraphRenderer(graphCanvas);
             GraphLayoutEngine layout = new GraphLayoutEngine();
-            Graph graph = builder.GenerateGraph(graphText.Text);
             layout.Layout(graph);
             renderer.Render(graph);
         }

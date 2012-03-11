@@ -7,7 +7,17 @@
             <ColumnDefinition Width="200" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBox FontFamily="Consolas" AcceptsReturn="True" Grid.Column="0" x:Name="graphText"/>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
+            <Button Content="Git..." x:Name="buttonGit" Margin="5" Width="50"/>
+            <Button Content="Hg..." x:Name="buttonMercurial" Margin="5" Width="50"/>
+            </StackPanel>
+            <TextBox FontFamily="Consolas" AcceptsReturn="True" Grid.Row="1" x:Name="graphText"/>
+        </Grid>
         <GridSplitter Grid.Column="0" Width="5"/>
         <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Canvas x:Name="graphCanvas" />
