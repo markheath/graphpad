@@ -37,6 +37,15 @@ namespace GraphPad.Tests
             AssertNodeIsOnRow(g, "g", 1);
         }
 
+        // failing test, work out how to deal with this
+        [Test]
+        public void CanLayoutAGraphWithMultipleRootNodes()
+        {
+            GraphLayoutEngine l = new GraphLayoutEngine();
+            Graph g = (new GraphBuilder()).GenerateGraph("a-b-c\na-c\nd-e-f");
+            l.Layout(g);
+        }
+
         //  test ideas
         // a-b-c-d\na-e-f-g\nb-h-i-j (should push first branch down?)
 
