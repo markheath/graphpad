@@ -15,7 +15,10 @@ namespace GraphPad.Logic
         public void AddChild(Node child)
         {
             if (IsAncestor(child))
-                throw new InvalidOperationException("Invalid DAG");
+            {
+                string message = String.Format("Invalid DAG {0} cannot be a child and ancestor of {1}", child.Name, this.Name);
+                throw new InvalidOperationException(message);
+            }
             AddConnection(child, RelationshipType.Child);
         }
 
