@@ -25,6 +25,20 @@ namespace GraphPad
             InitializeComponent();
             this.graphText.TextChanged += new TextChangedEventHandler(graphText_TextChanged);
             this.buttonGit.Click += new RoutedEventHandler(buttonGit_Click);
+            this.buttonMercurial.Click += new RoutedEventHandler(buttonMercurial_Click);
+        }
+
+        void buttonMercurial_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.Description = "Select Mercurial repository";
+            var result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                var builder = new MercurialGraphBuilder();
+                var graph = builder.LoadGraph(dialog.SelectedPath);
+                RedrawGraph(graph);
+            }
         }
 
         void buttonGit_Click(object sender, RoutedEventArgs e)

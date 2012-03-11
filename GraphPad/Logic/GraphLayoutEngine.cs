@@ -73,7 +73,7 @@ namespace GraphPad.Logic
                 if (col > 0 && grid[row, col - 1] == false)
                 {
                     // 1. work out min column
-                    int minColumn = n.Parents.Max(p => p.GetColumn()) + 1;
+                    int minColumn = n.Parents.Count() > 0 ? n.Parents.Max(p => p.GetColumn()) + 1 : 0;
                     // 2. see if any space is free to left
                     // not sure whether to go forward or back here
                     for (int newCol = minColumn; newCol < col; newCol++)

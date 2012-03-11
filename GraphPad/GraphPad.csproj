@@ -68,6 +68,7 @@
     <Compile Include="Gui\ArrowLineBase.cs" />
     <Compile Include="Gui\ArrowEnds.cs" />
     <Compile Include="Gui\ArrowPolyline.cs" />
+    <Compile Include="Logic\MercurialGraphBuilder.cs" />
     <Compile Include="Logic\GitGraphBuilder.cs" />
     <Compile Include="Logic\Grid.cs" />
     <Compile Include="Logic\NodeExtensions.cs" />
