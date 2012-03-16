@@ -65,11 +65,68 @@ namespace GraphPad.Logic
                     }
                     else
                     {
-                        connector = GetStraightLine(midNode, midConnection, nodeControl.Width / 2, Brushes.Red);
+                        var from = GetConnectionPoint(nodeControl, connectedNodeControl);
+                        var to = GetConnectionPoint(connectedNodeControl, nodeControl);
+                        connector = GetPolyLine(from, to, Brushes.Red);
                     }
                     canvas.Children.Add(connector);
                 }
             }
+        }
+
+        private Point GetConnectionPoint(UserControl from, UserControl to)
+        {
+            var connectionPoint = new Point();
+            var fromPosition = new Point((double)from.GetValue(Canvas.LeftProperty), (double)from.GetValue(Canvas.TopProperty));
+            var toPosition = new Point((double)to.GetValue(Canvas.LeftProperty), (double)to.GetValue(Canvas.TopProperty));
+
+            if (fromPosition.Y < toPosition.Y)
+            {
+                // bottom
+                connectionPoint.Y = fromPosition.Y + from.Height;
+                connectionPoint.X = fromPosition.X + from.Width / 2;
+            }
+            else if (fromPosition.Y == toPosition.Y)
+            {
+                connectionPoint.Y = fromPosition.Y + from.Height / 2;
+                if (fromPosition.X < toPosition.X)
+                {
+                    // right edge
+                    connectionPoint.X = fromPosition.X + from.Width;
+                }
+                else
+                {
+                    connectionPoint.X = fromPosition.X;
+                }
+            }
+            else
+            {
+                connectionPoint.Y = fromPosition.Y + from.Height / 2;
+                if (toPosition.X > fromPosition.X)
+                    connectionPoint.X = fromPosition.X + from.Width;
+                else
+                    connectionPoint.X = fromPosition.X;
+                
+            }
+            return connectionPoint;
+        }
+
+        private static UIElement GetPolyLine(Point from, Point to, Brush stroke)
+        {
+            var line = new ArrowPolyline();
+            line.Stroke = stroke;
+            line.StrokeThickness = 2.0;
+            line.ArrowEnds = ArrowEnds.Start;
+            line.ArrowLength = 8;
+
+            line.Points.Add(from);
+
+            if (from.Y != to.Y)
+            {
+                line.Points.Add(new Point(from.X, to.Y));
+            }
+            line.Points.Add(to);
+            return line;
         }
 
         private static ArrowLine GetStraightLine(Point from, Point to, double radius, Brush stroke)
