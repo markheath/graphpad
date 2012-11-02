@@ -43,72 +43,22 @@ namespace GraphPad.Logic
 
         private void CreateConnections(Graph graph)
         {
-            foreach (var node in graph.Nodes)
+            foreach (var parentNode in graph.Nodes)
             {
-                var nodeControl = (UserControl)node.MetaData["Control"];
-                foreach (var connection in node.Children)
+                var parentNodeControl = (INodeControl)parentNode.MetaData["Control"];
+                foreach (var childNode in parentNode.Children)
                 {
-                    var connectedNodeControl = (UserControl)connection.MetaData["Control"];
+                    var childNodeControl = (INodeControl)childNode.MetaData["Control"];
                     UIElement connector;
-                    var midNode = GetNodeMidpoint(nodeControl);
-                    var midConnection = GetNodeMidpoint(connectedNodeControl);
-                    var gridSpacing = nodeControl.Width + nodePadding;
 
-                    if (node.GetRow() == connection.GetRow())
-                    {
-                        connector = GetStraightLine(midNode, midConnection, nodeControl.Width / 2, Brushes.Black);
-                    }
-                    else if ((Math.Abs(node.GetRow() - connection.GetRow()) <= 1) &&
-                        (Math.Abs(node.GetColumn() - node.GetColumn()) <= 1))
-                    {
-                        connector = GetStraightLine(midNode, midConnection, nodeControl.Width / 2, Brushes.Green);
-                    }
-                    else
-                    {
-                        var from = GetConnectionPoint(nodeControl, connectedNodeControl);
-                        var to = GetConnectionPoint(connectedNodeControl, nodeControl);
-                        connector = GetPolyLine(from, to, Brushes.Red);
-                    }
+                    // the line goes from child to parent in a DAG
+                    var from = childNodeControl.GetConnectionPoint(childNode.GetDirectionTo(parentNode));
+                    var to = parentNodeControl.GetConnectionPoint(parentNode.GetDirectionTo(childNode));
+                    connector = GetStraightLine(from, to, Brushes.Green);
+                    //connector = GetPolyLine(from, to, Brushes.Green);
                     canvas.Children.Add(connector);
                 }
             }
-        }
-
-        private Point GetConnectionPoint(UserControl from, UserControl to)
-        {
-            var connectionPoint = new Point();
-            var fromPosition = new Point((double)from.GetValue(Canvas.LeftProperty), (double)from.GetValue(Canvas.TopProperty));
-            var toPosition = new Point((double)to.GetValue(Canvas.LeftProperty), (double)to.GetValue(Canvas.TopProperty));
-
-            if (fromPosition.Y < toPosition.Y)
-            {
-                // bottom
-                connectionPoint.Y = fromPosition.Y + from.Height;
-                connectionPoint.X = fromPosition.X + from.Width / 2;
-            }
-            else if (fromPosition.Y == toPosition.Y)
-            {
-                connectionPoint.Y = fromPosition.Y + from.Height / 2;
-                if (fromPosition.X < toPosition.X)
-                {
-                    // right edge
-                    connectionPoint.X = fromPosition.X + from.Width;
-                }
-                else
-                {
-                    connectionPoint.X = fromPosition.X;
-                }
-            }
-            else
-            {
-                connectionPoint.Y = fromPosition.Y + from.Height / 2;
-                if (toPosition.X > fromPosition.X)
-                    connectionPoint.X = fromPosition.X + from.Width;
-                else
-                    connectionPoint.X = fromPosition.X;
-                
-            }
-            return connectionPoint;
         }
 
         private static UIElement GetPolyLine(Point from, Point to, Brush stroke)
@@ -116,7 +66,7 @@ namespace GraphPad.Logic
             var line = new ArrowPolyline();
             line.Stroke = stroke;
             line.StrokeThickness = 2.0;
-            line.ArrowEnds = ArrowEnds.Start;
+            line.ArrowEnds = ArrowEnds.End;
             line.ArrowLength = 8;
 
             line.Points.Add(from);
@@ -129,35 +79,19 @@ namespace GraphPad.Logic
             return line;
         }
 
-        private static ArrowLine GetStraightLine(Point from, Point to, double radius, Brush stroke)
+        private static ArrowLine GetStraightLine(Point from, Point to, Brush stroke)
         {
             var line = new ArrowLine();
             line.Stroke = stroke;
             line.StrokeThickness = 2.0;
-            line.ArrowEnds = ArrowEnds.Start;
+            line.ArrowEnds = ArrowEnds.End;
             line.ArrowLength = 8;
-
-            // trim the line
-            var angle = Math.Atan((to.Y - from.Y) / (to.X - from.X));
-            var xOffset = radius * Math.Cos(angle);
-            var yOffset = radius * Math.Sin(angle);
-            from.X += xOffset;
-            from.Y += yOffset;
-
-            to.X -= xOffset;
-            to.Y -= yOffset;
 
             line.X1 = from.X;
             line.Y1 = from.Y;
             line.X2 = to.X;
             line.Y2 = to.Y;
             return line;
-        }
-
-        private static Point GetNodeMidpoint(UserControl node)
-        {
-            var radius = node.Width / 2;
-            return new Point((double)node.GetValue(Canvas.LeftProperty) + radius, (double)node.GetValue(Canvas.TopProperty) + radius);
         }
 
         private static UserControl CreateNodeControl(double left, double top, string name)

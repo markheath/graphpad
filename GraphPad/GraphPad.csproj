@@ -64,6 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ConnectionDirection.cs" />
     <Compile Include="Gui\ArrowLine.cs" />
     <Compile Include="Gui\ArrowLineBase.cs" />
     <Compile Include="Gui\ArrowEnds.cs" />

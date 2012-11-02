@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -15,21 +14,19 @@ using System.ComponentModel;
 
 namespace GraphPad
 {
+    public interface INodeControl
+    {
+        Point GetConnectionPoint(ConnectionDirection connectionDirection);
+    }
+
     /// <summary>
     /// Interaction logic for Node.xaml
     /// </summary>
-    public partial class NodeControl : UserControl
+    public partial class NodeControl : UserControl, INodeControl
     {
-        private List<NodeControl> connections = new List<NodeControl>();
-        
         public NodeControl()
         {
             InitializeComponent();
-        }
-
-        public List<NodeControl> Connections
-        {
-            get { return connections; }
         }
 
         public string NodeName
@@ -48,5 +45,35 @@ namespace GraphPad
             node.nodeNameTextBlock.Text = (string)args.NewValue;
         }
 
+        public Point GetConnectionPoint(ConnectionDirection connectionDirection)
+        {
+            var from = this;
+            var fromPosition = new Point((double)from.GetValue(Canvas.LeftProperty), (double)from.GetValue(Canvas.TopProperty));
+            
+            var radius = this.Width/2;
+            var corner = radius - Math.Sqrt((radius*radius)/2);
+
+            switch (connectionDirection)
+            {
+                case ConnectionDirection.West:
+                    return new Point(fromPosition.X, fromPosition.Y + from.Height / 2);
+                case ConnectionDirection.East:
+                    return new Point(fromPosition.X + from.Width, fromPosition.Y + from.Height/2);
+                case ConnectionDirection.North:
+                    return new Point(fromPosition.X + from.Width / 2, fromPosition.Y);
+                case ConnectionDirection.South:
+                    return new Point(fromPosition.X + from.Width / 2, fromPosition.Y + from.Height);
+                case ConnectionDirection.NorthWest:
+                    return new Point(fromPosition.X + corner, fromPosition.Y + corner);
+                case ConnectionDirection.SouthWest:
+                    return new Point(fromPosition.X + corner, fromPosition.Y + from.Height - corner);
+                case ConnectionDirection.NorthEast:
+                    return new Point(fromPosition.X + from.Width - corner, fromPosition.Y + corner);
+                case ConnectionDirection.SouthEast:
+                    return new Point(fromPosition.X + from.Width - corner, fromPosition.Y + from.Height - corner);
+                default:
+                    throw new ArgumentException("Invalid connection direction");
+            }
+        }
     }
 }
