@@ -5,3 +5,4 @@ obj/
 *.suo
 packages/
 *.crunchsolution.cache
+_ReSharper.*

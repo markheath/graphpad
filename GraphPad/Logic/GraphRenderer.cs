@@ -160,7 +160,7 @@ namespace GraphPad.Logic
             return new Point((double)node.GetValue(Canvas.LeftProperty) + radius, (double)node.GetValue(Canvas.TopProperty) + radius);
         }
 
-        private static NodeControl CreateNodeControl(double left, double top, string name)
+        private static UserControl CreateNodeControl(double left, double top, string name)
         {
             var nodeControl = new NodeControl();
             nodeControl.SetValue(Canvas.LeftProperty, left);

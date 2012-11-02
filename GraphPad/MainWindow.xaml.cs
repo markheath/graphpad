@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -58,8 +57,6 @@ namespace GraphPad
         {
             RecreateGraph();
         }
-
-        private Dictionary<string, NodeControl> nodes = new Dictionary<string, NodeControl>();
 
         private void RecreateGraph()
         {
