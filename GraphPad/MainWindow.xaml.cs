@@ -36,7 +36,7 @@ namespace GraphPad
             {
                 var builder = new MercurialGraphBuilder();
                 var graph = builder.LoadGraph(dialog.SelectedPath);
-                RedrawGraph(graph);
+                RedrawGraph(graph, CreateCommitNodeControl, new Size(200, 80));
             }
         }
 
@@ -47,9 +47,9 @@ namespace GraphPad
             var result = dialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                GitGraphBuilder gitBuilder = new GitGraphBuilder();
+                var gitBuilder = new GitGraphBuilder();
                 var graph = gitBuilder.LoadGraph(dialog.SelectedPath);
-                RedrawGraph(graph);
+                RedrawGraph(graph, CreateCommitNodeControl, new Size(200, 80));
             }
         }
 
@@ -60,23 +60,33 @@ namespace GraphPad
 
         private void RecreateGraph()
         {
-            GraphBuilder builder = new GraphBuilder();
-            Graph graph = builder.GenerateGraph(graphText.Text);
-            RedrawGraph(graph);
+            var builder = new GraphBuilder();
+            var graph = builder.GenerateGraph(graphText.Text);
+            RedrawGraph(graph, CreateCircleNodeControl, new Size(40, 40));
         }
 
-        private void RedrawGraph(Graph graph)
+        private void RedrawGraph(Graph graph, Func<Node, Size, UserControl> controlBuilder, Size nodeSize)
         {
-            GraphRenderer renderer = new GraphRenderer(graphCanvas, CreateCircleNodeControl, 40, 40);
-            GraphLayoutEngine layout = new GraphLayoutEngine();
+            var renderer = new GraphRenderer(graphCanvas, controlBuilder, nodeSize);
+            var layout = new GraphLayoutEngine();
             layout.Layout(graph);
             renderer.Render(graph);
         }
 
-        private static UserControl CreateCircleNodeControl(Node node)
+        private static UserControl CreateCircleNodeControl(Node node, Size size)
         {
             var nodeControl = new CircularNodeControl();
             nodeControl.NodeName = node.Name;
+            return nodeControl;
+        }
+
+        private static UserControl CreateCommitNodeControl(Node node, Size size)
+        {
+            var nodeControl = new CommitNodeControl();
+            nodeControl.CommitId = node.Name;
+            nodeControl.UserName = (string)node.MetaData["Author"];
+            nodeControl.MaxWidth = size.Width;
+            nodeControl.MaxHeight = size.Height;
             return nodeControl;
         }
     }

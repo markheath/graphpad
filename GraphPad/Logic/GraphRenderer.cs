@@ -13,17 +13,15 @@ namespace GraphPad.Logic
     class GraphRenderer
     {
         private Canvas canvas;
-        private readonly Func<Node, UserControl> controlBuilder;
-        private readonly double nodeWidth;
-        private readonly double nodeHeight;
+        private readonly Func<Node, Size, UserControl> controlBuilder;
+        private readonly Size nodeSize;
         private const double nodePadding = 10.0;
 
-        public GraphRenderer(Canvas canvas, Func<Node,UserControl> controlBuilder, double nodeWidth, double nodeHeight)
+        public GraphRenderer(Canvas canvas, Func<Node, Size, UserControl> controlBuilder, Size nodeSize)
         {
             this.canvas = canvas;
             this.controlBuilder = controlBuilder;
-            this.nodeWidth = nodeWidth;
-            this.nodeHeight = nodeHeight;
+            this.nodeSize = nodeSize;
         }
 
         public void Render(Graph graph)
@@ -33,18 +31,19 @@ namespace GraphPad.Logic
             // create nodes
             foreach (var node in graph.Nodes)
             {
-                var left = node.GetColumn() * (nodePadding + nodeWidth);
-                var top = node.GetRow() * (nodePadding + nodeHeight);
-                var nodeControl = controlBuilder(node);
+                var left = node.GetColumn() * (nodePadding + nodeSize.Width);
+                var top = node.GetRow() * (nodePadding + nodeSize.Height);
+                var nodeControl = controlBuilder(node, nodeSize);
                 nodeControl.SetValue(Canvas.LeftProperty, left);
                 nodeControl.SetValue(Canvas.TopProperty, top);
                 canvas.Children.Add(nodeControl);
                 node.MetaData["Control"] = nodeControl;
             }
+            canvas.UpdateLayout();
             CreateConnections(graph);
 
-            canvas.Width = canvas.Children.OfType<UserControl>().Max(x => (double)x.GetValue(Canvas.LeftProperty) + x.Width + nodePadding);
-            canvas.Height = canvas.Children.OfType<UserControl>().Max(x => (double)x.GetValue(Canvas.TopProperty) + x.Height + nodePadding);
+            canvas.Width = canvas.Children.OfType<UserControl>().Max(x => (double)x.GetValue(Canvas.LeftProperty) + x.ActualWidth + nodePadding);
+            canvas.Height = canvas.Children.OfType<UserControl>().Max(x => (double)x.GetValue(Canvas.TopProperty) + x.ActualHeight + nodePadding);
         }
 
         private void CreateConnections(Graph graph)

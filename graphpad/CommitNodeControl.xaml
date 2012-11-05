@@ -13,7 +13,7 @@
             </LinearGradientBrush>
         </Border.Background>
         <StackPanel>
-            <TextBlock FontWeight="Bold" Text="{Binding Path=UserName, ElementName=root}" FontSize="20"  />
+            <TextBlock FontWeight="Bold" Text="{Binding Path=CommitId, ElementName=root}" FontSize="20"  />
             <TextBlock Text="{Binding Path=UserName, ElementName=root}" FontSize="20"  />
         </StackPanel>
     </Border>
