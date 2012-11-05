@@ -22,9 +22,9 @@ namespace GraphPad
         public MainWindow()
         {
             InitializeComponent();
-            this.graphText.TextChanged += new TextChangedEventHandler(graphText_TextChanged);
-            this.buttonGit.Click += new RoutedEventHandler(buttonGit_Click);
-            this.buttonMercurial.Click += new RoutedEventHandler(buttonMercurial_Click);
+            graphText.TextChanged += graphText_TextChanged;
+            buttonGit.Click += buttonGit_Click;
+            buttonMercurial.Click += buttonMercurial_Click;
         }
 
         void buttonMercurial_Click(object sender, RoutedEventArgs e)
@@ -67,10 +67,17 @@ namespace GraphPad
 
         private void RedrawGraph(Graph graph)
         {
-            GraphRenderer renderer = new GraphRenderer(graphCanvas);
+            GraphRenderer renderer = new GraphRenderer(graphCanvas, CreateCircleNodeControl, 40, 40);
             GraphLayoutEngine layout = new GraphLayoutEngine();
             layout.Layout(graph);
             renderer.Render(graph);
+        }
+
+        private static UserControl CreateCircleNodeControl(Node node)
+        {
+            var nodeControl = new CircularNodeControl();
+            nodeControl.NodeName = node.Name;
+            return nodeControl;
         }
     }
 }

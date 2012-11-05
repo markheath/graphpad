@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="GraphPad.CommitNodeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="300" x:Name="root">
+    <Border  CornerRadius="5" BorderThickness="2" BorderBrush="Black">
+        <Border.Background>
+            <LinearGradientBrush EndPoint="0,1">
+                <GradientStop Offset="0" Color="#60FF60"></GradientStop>
+                <GradientStop Offset="1" Color="#009F00"></GradientStop>
+            </LinearGradientBrush>
+        </Border.Background>
+        <StackPanel>
+            <TextBlock FontWeight="Bold" Text="{Binding Path=UserName, ElementName=root}" FontSize="20"  />
+            <TextBlock Text="{Binding Path=UserName, ElementName=root}" FontSize="20"  />
+        </StackPanel>
+    </Border>
+
+</UserControl>

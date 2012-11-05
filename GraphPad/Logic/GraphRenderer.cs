@@ -13,13 +13,17 @@ namespace GraphPad.Logic
     class GraphRenderer
     {
         private Canvas canvas;
+        private readonly Func<Node, UserControl> controlBuilder;
+        private readonly double nodeWidth;
+        private readonly double nodeHeight;
         private const double nodePadding = 10.0;
-        private const double nodeWidth = 40.0;
-        private const double nodeHeight = 40.0;
 
-        public GraphRenderer(Canvas canvas)
+        public GraphRenderer(Canvas canvas, Func<Node,UserControl> controlBuilder, double nodeWidth, double nodeHeight)
         {
             this.canvas = canvas;
+            this.controlBuilder = controlBuilder;
+            this.nodeWidth = nodeWidth;
+            this.nodeHeight = nodeHeight;
         }
 
         public void Render(Graph graph)
@@ -31,7 +35,9 @@ namespace GraphPad.Logic
             {
                 var left = node.GetColumn() * (nodePadding + nodeWidth);
                 var top = node.GetRow() * (nodePadding + nodeHeight);
-                var nodeControl = CreateNodeControl(left, top, node.Name);
+                var nodeControl = controlBuilder(node);
+                nodeControl.SetValue(Canvas.LeftProperty, left);
+                nodeControl.SetValue(Canvas.TopProperty, top);
                 canvas.Children.Add(nodeControl);
                 node.MetaData["Control"] = nodeControl;
             }
@@ -94,13 +100,6 @@ namespace GraphPad.Logic
             return line;
         }
 
-        private static UserControl CreateNodeControl(double left, double top, string name)
-        {
-            var nodeControl = new CircularNodeControl();
-            nodeControl.SetValue(Canvas.LeftProperty, left);
-            nodeControl.SetValue(Canvas.TopProperty, top);
-            nodeControl.NodeName = name;
-            return nodeControl;
-        }
+
     }
 }
