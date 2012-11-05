@@ -83,8 +83,8 @@
     <Compile Include="Logic\IDictionary.cs" />
     <Compile Include="Logic\Node.cs" />
     <Compile Include="Logic\RelationshipType.cs" />
-    <Compile Include="NodeControl.xaml.cs">
-      <DependentUpon>NodeControl.xaml</DependentUpon>
+    <Compile Include="CircularNodeControl.xaml.cs">
+      <DependentUpon>CircularNodeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Logic\Tokenizer.cs" />
     <Page Include="MainWindow.xaml">
@@ -99,7 +99,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="NodeControl.xaml">
+    <Page Include="CircularNodeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

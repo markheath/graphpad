@@ -96,7 +96,7 @@ namespace GraphPad.Logic
 
         private static UserControl CreateNodeControl(double left, double top, string name)
         {
-            var nodeControl = new NodeControl();
+            var nodeControl = new CircularNodeControl();
             nodeControl.SetValue(Canvas.LeftProperty, left);
             nodeControl.SetValue(Canvas.TopProperty, top);
             nodeControl.NodeName = name;

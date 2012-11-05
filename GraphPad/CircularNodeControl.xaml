@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="GraphPad.NodeControl"
+﻿<UserControl x:Class="GraphPad.CircularNodeControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,7 +7,14 @@
              Width="40" Height="40"
              d:DesignHeight="40" d:DesignWidth="40">
     <Grid ToolTip="This is a node">
-        <Ellipse Stroke="Black" StrokeThickness="2" x:Name="ellipse" Fill="White" />
+        <Ellipse Stroke="Black" StrokeThickness="2" x:Name="ellipse">
+            <Ellipse.Fill>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Offset="0" Color="#60FF60"></GradientStop>
+                    <GradientStop Offset="1" Color="#009F00"></GradientStop>
+                </LinearGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="A" FontSize="20" x:Name="nodeNameTextBlock" />
     </Grid>
 </UserControl>

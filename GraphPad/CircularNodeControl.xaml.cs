@@ -22,9 +22,9 @@ namespace GraphPad
     /// <summary>
     /// Interaction logic for Node.xaml
     /// </summary>
-    public partial class NodeControl : UserControl, INodeControl
+    public partial class CircularNodeControl : UserControl, INodeControl
     {
-        public NodeControl()
+        public CircularNodeControl()
         {
             InitializeComponent();
         }
@@ -37,11 +37,11 @@ namespace GraphPad
 
         // Using a DependencyProperty as the backing store for NodeName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NodeNameProperty =
-            DependencyProperty.Register("NodeName", typeof(string), typeof(NodeControl), new UIPropertyMetadata("A", new PropertyChangedCallback(OnNodeNameChanged)));
+            DependencyProperty.Register("NodeName", typeof(string), typeof(CircularNodeControl), new UIPropertyMetadata("A", new PropertyChangedCallback(OnNodeNameChanged)));
 
         private static void OnNodeNameChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            var node = (NodeControl)sender;
+            var node = (CircularNodeControl)sender;
             node.nodeNameTextBlock.Text = (string)args.NewValue;
         }
 
